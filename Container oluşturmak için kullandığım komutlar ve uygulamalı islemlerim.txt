@@ -1,0 +1,143 @@
+:: MACOS DOCKER APPLİED TERMİNAL COMMANDS :: 
+:: IMAGE LİSTELE: 
+- muratcelik@Murat-MacBook-Pro ~ % docker images
+docker images
+docker image ls
+
+::IMAGE SİL: 
+docker container rm CONTAINERID
+docker rmi -f postgres:latest
+docker image rm *  //tüm imageları sil.
+
+
+:: CONTAİNER LİSTELE
+- Çalışan containerlar için
+docker ps
+
+- Çalışan ve stop olmuş tüm containerlar için
+docker ps -a
+
+:: CONTAİNER SİL
+docker container m -f postgres
+
+:: CONTAİNER ID
+-Detaylı container ID bakma
+docker container ls -a --no-trunc
+
+Sadece  container ID bakma;
+docker container ls -a -q
+
+:: CONTAİNER ÇALIŞTIR;
+docker container start CONTAINERID
+docker container start -a CONTAINERID
+
+:: CONTAİNER DURDUR;
+docker container stop CONTAINERID
+
+- Kill 10 sn shutdown eder.
+docker container kill CONTAINERID
+docker container prune (stop edlmiş tüm containerları sil)
+
+:: CONTAİNER BİLGİSİ 
+- Ayrıntılı Bilgi;
+docker container inspect CONTAINERID
+
+- Contains (IPAdress geçenleri getir)
+docker container inspect CONTAINERID | grep IPAdress
+
+:: PORT MAPPİNG
+- Port eklemek için;
+docker container run -d -p 5000:80 nginx 
+
+- Hangi port açık;
+docker container port CONTAINERID
+
+:: PLUGİN
+docker plugin ls
+
+- Plugin disable-enable;
+docker plugin disable PLUGINNAME
+docker plugin enable PLUGINNAME
+
+- Plugin ayrıntısını görme;
+docker plugin inspect PLUGINNAME
+
+- Plugin Kaldır;
+docker plugin rm PLUGINNAME
+
+
+:: VOLUME
+docker info
+ Docker Root Dir: /var/lib/docker   (docker volume örnek adresi )
+
+- Docker volume oluştur;
+docker volume create --name VOLUMENAME
+
+:: HELP
+docker container --help
+docker image --help
+docker tag   --help
+docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
+:: TAG
+REPOSITORY        TAG         IMAGE ID       CREATED      SIZE
+oracle/database   19.3.0-ee   677485a3776b   2 days ago   8.63GB
+
+docker tag REPO:TAG  yeniREPO:yeniTAG 
+
+muratcelik@Murat-MacBook-Pro ~ % docker tag oracle/database:19.3.0-ee pegamis/oracledatabase 
+muratcelik@Murat-MacBook-Pro ~ % docker images
+REPOSITORY               TAG         IMAGE ID       CREATED      SIZE
+oracle/database          19.3.0-ee   677485a3776b   2 days ago   8.63GB
+pegamis/oracledatabase   latest      677485a3776b   2 days ago   8.63GB
+
+:: TAG SİL
+muratcelik@Murat-MacBook-Pro ~ % docker rmi yeniora
+Untagged: yeniora:latest
+
+:: PUSH
+muratcelik@Murat-MacBook-Pro ~ % docker push pegamis/oracledatabase  
+
+:: ÖRNEK 1: İmage den kendi mynginx oluşturmak;
+docker run --name my_nginx -p 80:80 -d nginx
+
+:: ÖRNEK 2: İmage in adını değiştir ve eski image sil;
+--muratcelik@Murat-MacBook-Pro ~ % docker tag --help
+
+Usage:  docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+
+Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+
+Aliases:
+  docker image tag, docker tag
+
+--muratcelik@Murat-MacBook-Pro ~ % docker images    
+REPOSITORY                                    TAG         IMAGE ID       CREATED        SIZE
+oracle/database                               19.3.0-ee   677485a3776b   2 weeks ago    8.63GB
+postgres                                      latest      81f32a88ec56   2 weeks ago    639MB
+container-registry.oracle.com/database/free   latest      c304221ac2b1   3 months ago   12.4GB
+
+--muratcelik@Murat-MacBook-Pro ~ % docker tag container-registry.oracle.com/database/free oracle/database:23ai
+
+--muratcelik@Murat-MacBook-Pro ~ % docker images                                                              
+REPOSITORY                                    TAG         IMAGE ID       CREATED        SIZE
+oracle/database                               19.3.0-ee   677485a3776b   2 weeks ago    8.63GB
+postgres                                      latest      81f32a88ec56   2 weeks ago    639MB
+container-registry.oracle.com/database/free   latest      c304221ac2b1   3 months ago   12.4GB
+oracle/database                               23ai        c304221ac2b1   3 months ago   12.4GB
+
+--muratcelik@Murat-MacBook-Pro ~ % docker rmi container-registry.oracle.com/database/free
+Untagged: container-registry.oracle.com/database/free:latest
+
+--muratcelik@Murat-MacBook-Pro ~ % docker images                                         
+REPOSITORY        TAG         IMAGE ID       CREATED        SIZE
+oracle/database   19.3.0-ee   677485a3776b   2 weeks ago    8.63GB
+postgres          latest      81f32a88ec56   2 weeks ago    639MB
+oracle/database   23ai        c304221ac2b1   3 months ago   12.4GB
+
+ÖNEMLİ NOT:
+d : detach veya -d seçeneğiyle gösterilen detachment mode(ayrılmış mod), bir Docker konteynerinin terminalinizin arka planında çalıştığı anlamına gelir.
+ps: process status(süreç durumu)
+v : volume
+p : port
+e : environment
